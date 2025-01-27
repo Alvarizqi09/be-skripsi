@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})  # Configuring CORS for React front-end
 
 # Load the trained model
-model_path = "./Plant_Leaf_Model5.keras"  # Update with the correct path
+model_path = "./Plant_Leaf_Model14.keras"  # Update with the correct path
 model = tf.keras.models.load_model(model_path)
 
 # Define class names (this should match the order in your model)
