@@ -14,16 +14,15 @@ import base64
 app = Flask(__name__)
 CORS(app, supports_credentials=True)  
 
-# Google Drive file ID (ambil dari link yang diberikan)
-MODEL_URL = "https://drive.google.com/uc?id=1-ZvSgcMMJBABNWk8TVjOiL_C3WZzbRcN"
-MODEL_PATH = "/app/Plant_Leaf_ModelA6.keras"  # Railway menggunakan /app sebagai root folder
+MODEL_URL = "https://drive.google.com/uc?export=download&id=1-ZvSgcMMJBABNWk8TVjOiL_C3WZzbRcN"
+MODEL_PATH = "/app/Plant_Leaf_ModelA6.keras"
 
-# 📌 Cek apakah model sudah ada, jika belum, unduh dari Google Drive
+# Cek apakah model sudah ada, jika belum, unduh
 if not os.path.exists(MODEL_PATH):
     print("Downloading model from Google Drive...")
-    gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+    gdown.download(MODEL_URL, MODEL_PATH, quiet=False, fuzzy=True)
     print("Download complete!")
-
+    
 # 📌 Load model setelah diunduh
 print("Loading model...")
 model = tf.keras.models.load_model(MODEL_PATH)
