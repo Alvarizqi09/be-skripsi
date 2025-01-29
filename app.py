@@ -11,19 +11,17 @@ import io
 import base64
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
-
-# Load the trained model
-model_path = "./Plant_Leaf_Model15.keras"  # Update with the correct path
+from flask_cors import CORS
+CORS(app, supports_credentials=True) 
+model_path = "./Plant_Leaf_ModelA6.keras" 
 model = tf.keras.models.load_model(model_path)
 
-# Define class names
 class_names = ["Corn Common Rust", "Corn Gray Leaf Spot", "Corn Healthy", "Corn Northern Leaf Blight"]
 
 def prepare_image(img_path, img_size=(299, 299)):
     img = image.load_img(img_path, target_size=img_size)
     img_array = image.img_to_array(img)
-    img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
+    img_array = tf.expand_dims(img_array, 0)  
     return img_array
 
 def predict_image(img_path, model):
