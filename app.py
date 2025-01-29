@@ -6,29 +6,16 @@ import numpy as np
 from tensorflow.keras.preprocessing import image
 import threading
 import os
-import gdown
 from PIL import Image
 import io
 import base64
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)  
+from flask_cors import CORS
+CORS(app, supports_credentials=True) 
+model_path = "./Plant_Leaf_ModelA6.keras" 
+model = tf.keras.models.load_model(model_path)
 
-MODEL_URL = "https://drive.google.com/uc?export=download&id=1-ZvSgcMMJBABNWk8TVjOiL_C3WZzbRcN"
-MODEL_PATH = "/app/Plant_Leaf_ModelA6.keras"
-
-# Cek apakah model sudah ada, jika belum, unduh
-if not os.path.exists(MODEL_PATH):
-    print("Downloading model from Google Drive...")
-    gdown.download(MODEL_URL, MODEL_PATH, quiet=False, fuzzy=True)
-    print("Download complete!")
-    
-# 📌 Load model setelah diunduh
-print("Loading model...")
-model = tf.keras.models.load_model(MODEL_PATH)
-print("Model loaded successfully!")
-
-# 📌 Class names
 class_names = ["Corn Common Rust", "Corn Gray Leaf Spot", "Corn Healthy", "Corn Northern Leaf Blight"]
 
 def prepare_image(img_path, img_size=(299, 299)):
@@ -43,7 +30,7 @@ def predict_image(img_path, model):
     predicted_class = class_names[np.argmax(predictions)]
     confidence = np.max(predictions)
 
-    # Convert the predicted image to base64 string
+    # For the predicted image, convert the image to base64 string
     predicted_img = Image.open(img_path)
     buffered = io.BytesIO()
     predicted_img.save(buffered, format="PNG")
